@@ -8,18 +8,46 @@ var initialState = {
   cardsDone: 0,
   cardsFailed: 0,
   cardsLeft: 3,
-  cards: [
-    {front: 'Test first front', back: 'Test first back'},
-    {front: 'Second front card', back: 'Second back card'},
-    {front: 'Third card', back: 'This is the third back'}
-  ],
+  cards: initializeCards(),
   finishedCards: []
 };
+
+function initializeCards() {
+  var cards = [];
+  for (var i = 1; i <= 3; i++) {
+    cards.push({
+      front: 'Test front ' + i,
+      back: 'Test back ' + i,
+      passes: 0,
+      fails: 0,
+      encounters: 0,
+      nextTime: new Date().getTime()
+    });
+  }
+  return cards;
+}
+
+function minutesFromNow(minutes) {
+  return minutes * 60000 + new Date().getTime();
+}
+function hoursFromNow(hours) {
+  return hours * 60000 * 60 + new Date().getTime();
+}
 
 var showIf = (condition, element) => condition ? element : '';
 var hideIf = (condition, element) => !condition ? element : '';
 
-// Reducers
+var scoreCard = function({ cards, index, score }) {
+  var currentCard = cards[index];
+  return cards.slice(0, index).concat(
+    Object.assign({}, currentCard, {
+      score: score === 'FAIL' ? minutesFromNow(0.5) :
+        score === 'PASS' ? minutesFromNow(5) :
+        score === 'PERFECT' ? minutesFromNow(10) : minutesFromNow(1)
+    })
+  ).concat(cards.slice(index + 1));
+};
+
 var card = function(state, action) {
   if (state === undefined) return initialState;
   switch (action.type) {
@@ -64,7 +92,7 @@ var App = view({
 });
 
 var GoalTracker = view({
-  render: function() {
+  render() {
     var state = store.getState();
     return (
       <div className="goal-tracker">
@@ -78,7 +106,7 @@ var GoalTracker = view({
 });
 
 var CardButtons = view({
-  render: function() {
+  render() {
     var state = store.getState();
     return (
       <div className="card-buttons col-xs-11 col-sm-9">
