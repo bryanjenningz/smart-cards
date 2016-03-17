@@ -1,0 +1,17 @@
+.card {
+  max-width: 500px;
+}
+.card-inner {
+  height: 500px;
+  position: relative;
+}
+.card-buttons {
+  position: absolute;
+  bottom: 30px;
+}
+.goal-tracker {
+  font-size: 9px;
+  position: absolute;
+  right: 5px;
+  top: 3px;
+}
