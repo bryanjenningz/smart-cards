@@ -62,7 +62,7 @@ var card = function(state, action) {
           return Object.assign({}, nextState, {
             cards: state.cards.slice(0, currentIndex).concat(state.cards.slice(currentIndex + 1)),
             cardsLeft: state.cardsLeft - 1,
-            index: state.index === state.cardsLeft - 1 ? 0 : state.index + 1, 
+            index: state.index === state.cards.length - 1 ? 0 : state.index, 
             backShown: false
           });
       }
@@ -163,9 +163,10 @@ var Card = view({
   }
 });
 
-var render = function() {
+function render() {
   ReactDOM.render(<App />, rootEl);
-};
+}
+
 var store = Redux.createStore(card);
 store.subscribe(render);
 render();
