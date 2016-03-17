@@ -4,7 +4,6 @@ var initialState = {
   index: 0,
   backShown: false,
   cardsTotal: 3,
-  cardsUnseen: 3,
   cardsDone: 0,
   cardsFailed: 0,
   cardsLeft: 3,
@@ -53,7 +52,8 @@ var card = function(state, action) {
         case 'FAIL':
           return Object.assign({}, state, {
             index: state.index === state.cardsLeft - 1 ? 0 : state.index + 1,
-            backShown: false
+            backShown: false,
+            cardsFailed: state.cardsFailed + 1
           });
 
         case 'PASS':
@@ -62,6 +62,7 @@ var card = function(state, action) {
           return Object.assign({}, nextState, {
             cards: state.cards.slice(0, currentIndex).concat(state.cards.slice(currentIndex + 1)),
             cardsLeft: state.cardsLeft - 1,
+            cardsDone: state.cardsDone + 1,
             index: state.index === state.cards.length - 1 ? 0 : state.index, 
             backShown: false
           });
@@ -89,8 +90,7 @@ var GoalTracker = view({
       <div className="goal-tracker">
         <span className="goal-total">Total: {state.cardsTotal}, </span>
         <span className="goal-done">Done: {state.cardsDone}, </span>
-        <span className="goal-failed">Failed: {state.cardsFailed}, </span>
-        <span className="goal-unseen">Unseen: {state.cardsUnseen} </span>
+        <span className="goal-failed">Failed: {state.cardsFailed}</span>
       </div>
     );
   }
@@ -161,9 +161,11 @@ var Card = view({
         </div>
       );
     } else {
+      var successRate = Math.round(100 * state.cardsDone / (state.cardsFailed + state.cardsDone));
       return (
         <div>
-          Finished!
+          <div>Finished!</div>
+          <div>Success Rate: {successRate}%</div>
         </div>
       );
     }
