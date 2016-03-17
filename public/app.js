@@ -33,19 +33,10 @@ function minutesFromNow(minutes) {
 function hoursFromNow(hours) {
   return hours * 60000 * 60 + new Date().getTime();
 }
-
-var showIf = (condition, element) => condition ? element : '';
-var hideIf = (condition, element) => !condition ? element : '';
-
-var scoreCard = function({ cards, index, score }) {
-  var currentCard = cards[index];
-  return cards.slice(0, index).concat(
-    Object.assign({}, currentCard, {
-      score: score === 'FAIL' ? minutesFromNow(0.5) :
-        score === 'PASS' ? minutesFromNow(5) :
-        score === 'PERFECT' ? minutesFromNow(10) : minutesFromNow(1)
-    })
-  ).concat(cards.slice(index + 1));
+function cardNextTime(score) {
+  return score === 'FAIL' ? minutesFromNow(0.5) :
+         score === 'PASS' ? minutesFromNow(5) :
+         score === 'PERFECT' ? minutesFromNow(10) : minutesFromNow(1);
 };
 
 var card = function(state, action) {
@@ -106,7 +97,7 @@ var GoalTracker = view({
 });
 
 var CardButtons = view({
-  render() {
+  render: function() {
     var state = store.getState();
     var buttons;
     if (!state.backShown) {
@@ -147,13 +138,22 @@ var Card = view({
     var state = store.getState();
     var current = state.cards[state.index];
 
+    var cardBack;
+    if (state.backShown) {
+      cardBack = (
+        <div>
+          <div>{current.back}</div>
+          <hr />
+        </div>
+      );
+    }
+
     return current ? (
       <div className="container card">
         <div className="jumbotron card-inner">
           <GoalTracker />
           <div>{current.front}</div>
-          {showIf(state.backShown, <hr />)}
-          {showIf(state.backShown, <div>{current.back}</div>)}
+          {cardBack}
           <CardButtons />
         </div>
       </div>
