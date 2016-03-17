@@ -83,7 +83,7 @@ var App = view({
 });
 
 var GoalTracker = view({
-  render() {
+  render: function() {
     var state = store.getState();
     return (
       <div className="goal-tracker">
@@ -136,6 +136,7 @@ var CardButtons = view({
 var Card = view({
   render: function() {
     var state = store.getState();
+    var cardsRemaining = state.cards.length > 0;
     var current = state.cards[state.index];
 
     var cardBack;
@@ -148,18 +149,24 @@ var Card = view({
       );
     }
 
-    return current ? (
-      <div className="container card">
-        <div className="jumbotron card-inner">
-          <GoalTracker />
-          <div>{current.front}</div>
-          {cardBack}
-          <CardButtons />
+    if (cardsRemaining) {
+      return (
+        <div className="container card">
+          <div className="jumbotron card-inner">
+            <GoalTracker />
+            <div>{current.front}</div>
+            {cardBack}
+            <CardButtons />
+          </div>
         </div>
-      </div>
-    ) : (
-      <div>Finished!</div>
-    );
+      );
+    } else {
+      return (
+        <div>
+          Finished!
+        </div>
+      );
+    }
   }
 });
 
