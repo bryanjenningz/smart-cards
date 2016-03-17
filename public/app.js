@@ -108,12 +108,35 @@ var GoalTracker = view({
 var CardButtons = view({
   render() {
     var state = store.getState();
+    var buttons;
+    if (!state.backShown) {
+      buttons = (
+        <button className="btn btn-lg btn-default col-xs-12" 
+                onClick={() => store.dispatch({type: 'SHOW_BACK'})}>
+          Show Back
+        </button>
+      );
+    } else {
+      buttons = (
+        <div>
+          <button className="btn btn-lg btn-default col-xs-4" 
+                  onClick={() => store.dispatch({type: 'NEXT_CARD', score: 'FAIL'})}>
+            Fail
+          </button>
+          <button className="btn btn-lg btn-default col-xs-4"
+                  onClick={() => store.dispatch({type: 'NEXT_CARD', score: 'PASS'})}>
+            Pass
+          </button>
+          <button className="btn btn-lg btn-default col-xs-4"
+                  onClick={() => store.dispatch({type: 'NEXT_CARD', score: 'PERFECT'})}>
+            Perfect
+          </button>
+        </div>
+      );
+    }
     return (
       <div className="card-buttons col-xs-11 col-sm-9">
-        {hideIf(state.backShown, <button className="btn btn-lg btn-default col-xs-12" onClick={() => store.dispatch({type: 'SHOW_BACK'})}>Show Back</button>)}
-        {showIf(state.backShown, <button className="btn btn-lg btn-default col-xs-4" onClick={() => store.dispatch({type: 'NEXT_CARD', score: 'FAIL'})}>Fail</button>)}
-        {showIf(state.backShown, <button className="btn btn-lg btn-default col-xs-4" onClick={() => store.dispatch({type: 'NEXT_CARD', score: 'PASS'})}>Pass</button>)} 
-        {showIf(state.backShown, <button className="btn btn-lg btn-default col-xs-4" onClick={() => store.dispatch({type: 'NEXT_CARD', score: 'PERFECT'})}>Perfect</button>)}
+        {buttons}
       </div> 
     );
   }
