@@ -39,7 +39,7 @@ function cardNextTime(score) {
 };
 
 var card = function(state, action) {
-  if (state === undefined) return initialState;
+  if (state === undefined) return Object.assign({}, initialState);
   switch (action.type) {
     case 'SHOW_BACK':
       return Object.assign({}, state, {backShown: true});
@@ -67,6 +67,9 @@ var card = function(state, action) {
             backShown: false
           });
       }
+
+    case 'START_REP':
+      return Object.assign({}, initialState);
 
     default:
       return state;
@@ -166,6 +169,7 @@ var Card = view({
         <div>
           <div>Finished!</div>
           <div>Success Rate: {successRate}%</div>
+          <button onClick={() => store.dispatch({type: 'START_REP'})}>Another Rep!</button>
         </div>
       );
     }
