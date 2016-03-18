@@ -166,10 +166,12 @@ var Card = view({
     } else {
       var successRate = Math.round(100 * state.cardsDone / (state.cardsFailed + state.cardsDone));
       return (
-        <div>
-          <div>Finished!</div>
-          <div>Success Rate: {successRate}%</div>
-          <button onClick={() => store.dispatch({type: 'START_REP'})}>Another Rep!</button>
+        <div className="container card">
+          <div className="jumbotron">
+            <div>Finished!</div>
+            <div>Success Rate: {successRate}%</div>
+            <button onClick={() => store.dispatch({type: 'START_REP'})}>Another Rep!</button>
+          </div>
         </div>
       );
     }
